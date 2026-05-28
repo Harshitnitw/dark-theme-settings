@@ -1,0 +1,58 @@
+/* Low Contrast Markdown Preview - Gray on Black */
+html body {
+    background-color: #000000 !important;
+}
+html body, html body * {
+    color: #808080 !important;
+}
+html body p, html body span, html body li, html body td, html body th {
+    color: #808080 !important;
+    background-color: #000000 !important;
+}
+html body a {
+    color: #88ddff !important;
+    background-color: #000000 !important;
+}
+html body h1, html body h2, html body h3, html body h4, html body h5, html body h6 {
+    color: #969696 !important;
+    background-color: #000000 !important;
+}
+html body strong, html body b {
+    color: #cccccc !important;
+}
+html body em, html body i {
+    color: #808080 !important;
+}
+html body code, html body pre {
+    background-color: #0a0a0a !important;
+    color: #808080 !important;
+}
+html body pre code {
+    background-color: #0a0a0a !important;
+    color: #808080 !important;
+}
+html body hr {
+    border-color: #333333 !important;
+}
+html body blockquote {
+    border-left-color: #404040 !important;
+    color: #969696 !important;
+    background-color: #0a0a0a !important;
+}
+html body table {
+    border-color: #333333 !important;
+}
+html body table th {
+    background-color: #0a0a0a !important;
+    color: #cccccc !important;
+}
+html body table td {
+    background-color: #000000 !important;
+    color: #808080 !important;
+}
+html body img {
+    background-color: #000000 !important;
+}
+html body ol, html body ul {
+    background-color: #000000 !important;
+}

@@ -1,0 +1,5 @@
+/* Antigravity Custom Theme - Low Contrast Text + Black Background */
+body,body *{color:#969696!important;background-color:#000000!important}
+h1,h2,h3,h4,h5,h6{color:#969696!important}
+.rendered-markdown code,.prose code{color:#737373!important;background-color:#050505!important}
+.chat-attached-context-pill,.chat-code-citation-label,.chat-thinking-text{color:#555555!important}

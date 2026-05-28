@@ -1,0 +1,148 @@
+{
+    "workbench.colorTheme": "Antigravity",
+    "editor.fontSize": 18,
+    "editor.wordWrap": "on",
+    "remote.SSH.remotePlatform": {
+        "githubcodespace": "linux",
+        "work": "linux",
+        "NITW": "linux",
+        "slackbot-longev": "linux",
+        "claude-auto": "linux",
+        "qualevita-longev": "linux",
+        "Harshitkedia321-qualevita-longev": "linux",
+        "claude-auto-HarshitKedia321": "linux",
+        "longev-linkedin-scrapper-HarshitKedia321": "linux",
+        "longev-linkedin-scrapper-HarshitKedia123": "linux",
+        "longev-linkedin-post-generator-SaaS-harshit-longevai": "linux"
+    },
+    "files.autoSave": "afterDelay",
+    "editor.tokenColorCustomizations": {
+        "[Antigravity]": {
+            "textMateRules": [
+                {
+                    "scope": [
+                        "source",
+                        "variable",
+                        "meta.function-call.generic",
+                        "support.variable",
+                        "variable.other.constant.python",
+                        "entity.name.function",
+                        "support.function",
+                        "punctuation",
+                        "entity.name.function.decorator",
+                        "keyword.operator",
+                        "meta.paragraph.markdown",
+                        "markup.inline.raw.string.markdown",
+                        "markup.inserted.diff",
+                        "markup.deleted.diff",
+                        "fenced_code.block.language.markdown",
+                        "markup.fenced_code.block.markdown keyword",
+                        "markup.fenced_code.block.markdown storage.type",
+                        "markup.fenced_code.block.markdown constant.language",
+                        "markup.fenced_code.block.markdown support.type",
+                        "meta.tag.jsx.children",
+                        "string.unquoted.plain.in.jsx",
+                        "text.html.derivative"
+                    ],
+                    "settings": {
+                        "foreground": "#6b6b6b"
+                    }
+                },
+                {
+                    // Forces bold text in markdown/chat editors to drop its bright formatting
+                    "scope": [
+                        "markup.bold",
+                        "markup.bold.markdown",
+                        "markup.heading"
+                    ],
+                    "settings": {
+                        "foreground": "#6b6b6b",
+                        "fontStyle": ""
+                    }
+                },
+                {
+                    "scope": [
+                        "meta.diff.header",
+                        "meta.diff.index",
+                        "meta.diff.header.from-file",
+                        "meta.diff.header.to-file",
+                        "meta.diff.range"
+                    ],
+                    "settings": {
+                        "foreground": "#4a708b"
+                    }
+                }
+            ]
+        }
+    },
+    "workbench.colorCustomizations": {
+        "[Antigravity]": {
+            // --- THE MAGIC KEYS FOR DIMMING CURSOR CHAT ---
+            "widget.foreground": "#6b6b6b", // Kills bright white in all panels/chat
+            "foreground": "#6b6b6b", // Base text
+            "descriptionForeground": "#555555",
+            // --- CURSOR AI CHAT SPECIFIC ---
+            "sideBar.foreground": "#6b6b6b",
+            "sideBarTitle.foreground": "#6b6b6b",
+            "panel.foreground": "#6b6b6b",
+            "panelTitle.activeForeground": "#6b6b6b",
+            "panelTitle.inactiveForeground": "#444444",
+            "chat.requestForeground": "#6b6b6b", // Targets user prompt text
+            // --- CHAT WEBVIEW / MARKDOWN ---
+            "textPreformat.foreground": "#8a8a8a", // Backticks `code` in chat
+            "textPreformat.background": "#1a1a1a",
+            "textLink.foreground": "#4a708b", // Links
+            "textLink.activeForeground": "#5c8ba8",
+            "textBlockQuote.background": "#0a0a0a",
+            "textBlockQuote.border": "#222222",
+            // --- INPUT BOXES (Where you type to Claude) ---
+            "input.foreground": "#6b6b6b",
+            "input.background": "#000000",
+            "input.border": "#1a1a1a",
+            "input.placeholderForeground": "#444444",
+            // --- UI ICONS & MENUS ---
+            "icon.foreground": "#555555",
+            "menu.foreground": "#6b6b6b",
+            "menu.background": "#000000",
+            "activityBar.foreground": "#6b6b6b",
+            "activityBar.inactiveForeground": "#333333",
+            // --- MAIN EDITOR & TERMINAL ---
+            "editor.foreground": "#6b6b6b",
+            "editor.background": "#000000",
+            "terminal.foreground": "#6b6b6b",
+            "terminal.background": "#000000",
+            "terminal.ansiBrightWhite": "#6b6b6b",
+            "terminal.ansiWhite": "#6b6b6b",
+            // --- MUTED HIGHLIGHTS ---
+            "editor.selectionBackground": "#222222",
+            "terminal.selectionBackground": "#222222",
+            // --- TABS & GUIDES ---
+            "tab.activeForeground": "#6b6b6b",
+            "tab.inactiveForeground": "#333333",
+            "editorLineNumber.foreground": "#252525",
+            "editorLineNumber.activeForeground": "#3a3a3a",
+            "breadcrumb.foreground": "#444444",
+            "breadcrumb.focusForeground": "#6b6b6b",
+            "breadcrumb.activeSelectionForeground": "#6b6b6b",
+            "editorIndentGuide.background1": "#111111",
+            "editorIndentGuide.activeBackground1": "#2a2a2a"
+        }
+    },
+    "cursor.composer.shouldQueueWhenGenerating": false,
+    "cursor.composer.textSizeScale": 1.15,
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "terminal.integrated.env.linux": {
+        "FORCE_COLOR": "0"
+    },
+    "roo-cline.allowedCommands": [
+        "npm test",
+        "npm install",
+        "tsc",
+        "git log",
+        "git diff",
+        "git show"
+    ],
+    "roo-cline.deniedCommands": [],
+    "git.autofetch": true,
+    "python.languageServer": "Default"
+}

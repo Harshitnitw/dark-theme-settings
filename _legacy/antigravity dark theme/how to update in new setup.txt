@@ -1,0 +1,50 @@
+
+### 1. "Installation appears to be corrupt"
+
+Antigravity (like all VS Code forks) checksums its core files on startup. Modifying `workbench.html` breaks the checksum. It's cosmetic — nothing is actually corrupt. Click the `×` to dismiss. There's no "Don't show again" on the banner itself, but you can suppress it via the command palette: `Ctrl+Shift+P` → **"Dismiss Corrupt Installation Message"** (or similar — try searching "corrupt").
+
+### 2. On Updates
+
+You're right. When Antigravity auto-updates:
+- **`workbench.html`** gets overwritten → you must re-add the single `<link>` line
+- **`antigravity-custom.css`** *may* survive (it's a new file, not tracked), but some update mechanisms wipe the entire directory — no guarantee
+- **`settings.json`** is safe — it's in the user data directory, never touched by updates
+
+**Post-update checklist:**
+1. Open `workbench.html` present in `C:\Users\Harshit\AppData\Local\Programs\Antigravity\resources\app\out\vs\code\electron-browser\workbench` add the `<link>` line back
+2. Verify `antigravity-custom.css` still exists — if not, recreate it (keep a backup copy somewhere)
+3. Dismiss the "corrupt" banner again
+
+### 3. Replicating on Linux
+
+The paths change. On Linux, Antigravity typically installs to one of:
+```
+/usr/share/antigravity/
+/opt/Antigravity/
+/usr/lib/antigravity/
+```
+
+And user settings live at:
+```
+~/.config/Antigravity/User/settings.json
+```
+
+You need to find the exact install path on your Linux box. Run:
+
+```bash
+which antigravity    # or whatever the binary is called
+# then follow the symlink to find resources/app/out/vs/...
+```
+
+Once you have the base path, the procedure is identical:
+
+1. **Copy `settings.json`** — just copy your Windows `settings.json` to `~/.config/Antigravity/User/settings.json` (strip the `remote.SSH.remotePlatform` block or adjust if needed)
+
+2. **Copy `antigravity-custom.css`** to `<install-path>/resources/app/out/vs/code/electron-browser/workbench/antigravity-custom.css`
+
+3. **Edit `workbench.html`** at the same directory — add after the main CSS `<link>`:
+   ```html
+   <!-- Custom grey-on-black overrides (halation reduction) -->
+   <link rel="stylesheet" href="./antigravity-custom.css">
+   ```
+

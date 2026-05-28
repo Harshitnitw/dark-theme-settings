@@ -1,0 +1,306 @@
+/*
+ * Antigravity Custom Theme Overrides — OLED Anti-Halation
+ * --------------------------------------------------------
+ * Body text:    #969696   (readable dim gray)
+ * Headings/bold:#8a8a8a   (DIMMER than body — anti-halation)
+ * Sub-labels:   #555555   (dates, pills, citations)
+ * Backgrounds:  #000000   (pure black)
+ *
+ * Loaded via <link> in workbench.html. To revert: remove that <link>.
+ */
+
+
+/* ============================================================
+ *  1. TAILWIND TEXT COLOR OVERRIDES
+ *     Antigravity's chat/agent/sidebar UIs use Tailwind utility
+ *     classes with hardcoded RGB values that bypass colorCustomizations.
+ *  ============================================================ */
+.text-white,
+.text-gray-100,
+.text-gray-200,
+.text-gray-300            { color: #969696 !important; }
+.text-gray-400            { color: #737373 !important; }
+.text-gray-500            { color: #969696 !important; }
+.text-gray-600            { color: #555555 !important; }
+.text-gray-700            { color: #444444 !important; }
+
+/* Colored text → muted pastels */
+.text-blue-300,
+.text-blue-400,
+.text-blue-500,
+.text-blue-600            { color: #5c758a !important; }
+.text-green-300,
+.text-green-400,
+.text-green-500,
+.text-green-600           { color: #5c7a5c !important; }
+.text-red-300,
+.text-red-400,
+.text-red-500,
+.text-red-600             { color: #7a5c5c !important; }
+.text-yellow-400,
+.text-yellow-500          { color: #7a735c !important; }
+.text-orange-400,
+.text-orange-500          { color: #7a6b5c !important; }
+.text-purple-400,
+.text-purple-500          { color: #6b5c7a !important; }
+
+
+/* ============================================================
+ *  2. TAILWIND BACKGROUND OVERRIDES
+ *     Kill bright bgs (Kilo diff red/green, agent panel surfaces).
+ *  ============================================================ */
+.bg-white,
+.bg-gray-50               { background-color: #000000 !important; }
+.bg-gray-100,
+.bg-gray-200              { background-color: #050505 !important; }
+.bg-gray-300,
+.bg-gray-400              { background-color: #0a0a0a !important; }
+.bg-gray-700,
+.bg-gray-800,
+.bg-gray-900              { background-color: #0d0d0d !important; }
+
+/* Kilo Code / agent diff-style bgs */
+.bg-green-50,
+.bg-green-100,
+.bg-green-200,
+.bg-green-300,
+.bg-green-400,
+.bg-green-500,
+.bg-green-600             { background-color: #0a150a !important; }
+.bg-red-50,
+.bg-red-100,
+.bg-red-200,
+.bg-red-300,
+.bg-red-400,
+.bg-red-500,
+.bg-red-600               { background-color: #150a0a !important; }
+.bg-blue-50,
+.bg-blue-100,
+.bg-blue-500,
+.bg-blue-600              { background-color: #0a1015 !important; }
+.bg-yellow-50,
+.bg-yellow-400,
+.bg-yellow-500            { background-color: #15150a !important; }
+
+
+/* ============================================================
+ *  3. MARKDOWN VARIABLES + CHAT/AGENT CONTAINERS
+ *  ============================================================ */
+:root {
+    --text-strong:      #8a8a8a !important;
+    --markdown-strong:  #8a8a8a !important;
+    --markdown-heading: #8a8a8a !important;
+    --text-base:        #969696 !important;
+    --markdown-text:    #969696 !important;
+}
+
+/* NOTE: container-level colors deliberately use plain (not !important)
+ * so that syntax-highlighting tokens, ANSI-styled spans inside the AI
+ * agents, and Tailwind text-* utilities can override them. */
+.chat-widget,
+.interactive-session,
+.chat-markdown-part,
+.chat-status-message,
+.chat-thinking-box,
+.chat-tool-invocation-part,
+.antigravity-agent-side-panel,
+.antigravity-agent-mode,
+.agent-driven-pane,
+.agent-session-title,
+.agent-session-description,
+.agent-session-details-row,
+.prose,
+[class*="kilo-"],
+[class*="roo-cline"]      { color: #969696; }
+
+
+/* ============================================================
+ *  4. RENDERED MARKDOWN — HEADINGS & BOLD GO DIMMER
+ *     #8a8a8a is intentionally DIMMER than #969696 body.
+ *     This is the opposite of most themes (which brighten bold)
+ *     and is the anti-halation trick: emphasis = less brightness,
+ *     not more.
+ *  ============================================================ */
+/* Prose-level colors use plain rules — syntax-highlight tokens
+ * inside <pre><code> blocks need to win the cascade. */
+.rendered-markdown,
+.rendered-markdown p,
+.rendered-markdown li,
+.rendered-markdown td,
+.rendered-markdown th,
+.rendered-markdown blockquote,
+.rendered-markdown > span,
+.prose p,
+.prose li                 { color: #969696; }
+
+.rendered-markdown h1,
+.rendered-markdown h2,
+.rendered-markdown h3,
+.rendered-markdown h4,
+.rendered-markdown h5,
+.rendered-markdown h6,
+.rendered-markdown strong,
+.rendered-markdown b,
+.prose strong,
+.prose b,
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6,
+.markdown-body strong,
+.markdown-body b,
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6,
+.chat-widget strong,
+.chat-widget b,
+.chat-widget h1,
+.chat-widget h2,
+.chat-widget h3,
+.chat-widget h4,
+.chat-widget h5,
+.chat-widget h6,
+strong, b, h1, h2, h3, h4, h5, h6 {
+    color: #8a8a8a !important;
+    font-weight: 500 !important;
+}
+/* Children of bold/heading get the color but NOT !important —
+ * a syntax-highlighted span inside a heading keeps its token color. */
+strong *, b *, h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { color: #8a8a8a; }
+
+/* Even dimmer for the largest headings (h1/h2 in agent panel) */
+.rendered-markdown h1,
+.rendered-markdown h2,
+.prose h1, .prose h2,
+.markdown-body h1,
+.markdown-body h2,
+h1, h2                    { color: #7a7a7a !important; }
+h1 *, h2 *                { color: #7a7a7a; }
+
+
+/* ============================================================
+ *  5. INLINE CODE + CODE BLOCKS
+ *  Critical: inline code (`like-this`) gets recolored; fenced
+ *  ```code blocks``` keep their syntax-highlight colors.
+ *  ============================================================ */
+
+/* Inline code only — :not(pre *) excludes anything inside <pre> */
+.rendered-markdown :not(pre) > code,
+.prose             :not(pre) > code,
+.chat-widget       :not(pre) > code,
+:not(pre) > code {
+    color: #8a8a8a !important;
+    background-color: #0a0a0a !important;
+    border: 1px solid #151515 !important;
+    padding: 1px 4px !important;
+}
+
+/* Fenced blocks: only set the background; let the syntax highlighter
+ * paint the foreground (Pygments / shiki / textmate tokens). */
+.rendered-markdown pre,
+.prose pre,
+pre {
+    background-color: #020202 !important;
+    border: 1px solid #0a0a0a !important;
+}
+/* Dim the BASE color of pre code only — used when there's no
+ * syntax highlighting at all (plain text fences). Specific token
+ * classes (.hljs-keyword, .token.string, etc.) will override this. */
+pre code, pre code span:not([class*="hljs"]):not([class*="token"]) {
+    background-color: transparent !important;
+}
+
+
+/* ============================================================
+ *  6. SUB-LABELS (dates, citations, pills, thinking)
+ *  ============================================================ */
+.chat-attached-context-pill,
+.chat-attached-context-custom-text,
+.chat-attached-context-url,
+.chat-code-citation-label,
+.chat-file-changes-label,
+.chat-thinking-text,
+.chat-thinking-item,
+.chat-thinking-items,
+.chat-footer-details,
+.chat-list-divider-label,
+.chat-model-label,
+.chat-loading-content,
+.chat-response-loading,
+.chat-suggest-next-widget,
+.interactive-session .disclaimer,
+.agent-session-status     { color: #555555 !important; }
+
+
+/* ============================================================
+ *  7. WEBVIEW BACKGROUNDS — kill any residual bright surfaces
+ *  ============================================================ */
+.bg-agent-convo-background,
+.bg-ide-chat-background,
+[id^="webview-"] body     { background-color: #000000 !important; }
+
+.chat-widget *:not(a):not(.codicon):not([class*="icon"]):not([class*="status-indicator"]) {
+    --tw-text-opacity: 1;
+}
+
+
+/* ============================================================
+ *  8. TAB TITLE TEXT DIMMING — fixes the bright active-tab
+ *     filename in the screenshot ("Preview AIRTEL_STATIC_IPV...")
+ *  ============================================================ */
+.tab .tab-label,
+.tab .monaco-icon-label,
+.tab .label-name,
+.tabs-container .tab .monaco-highlighted-label,
+.monaco-workbench .part.editor > .content .editor-group-container .title .tabs-container .tab.active .tab-label,
+.monaco-workbench .part.editor > .content .editor-group-container .title .tabs-container .tab .tab-label,
+.monaco-workbench .tabs-container .tab .tab-label,
+.monaco-workbench .tabs-container .tab .monaco-icon-label,
+.monaco-workbench .tabs-container .tab .monaco-icon-label .label-name,
+.monaco-icon-label .label-name { color: #8a8a8a !important; }
+
+.tab.active .tab-label,
+.tab.active .monaco-icon-label .label-name { color: #8a8a8a !important; }
+
+
+/* ============================================================
+ *  9. TERMINAL / CLAUDE CLI BRIGHT WHITE
+ *     The Claude CLI uses ANSI bright-white. terminal.ansiBrightWhite
+ *     in settings.json handles the color, but this also dims any
+ *     terminal-output text rendered via CSS (chat-terminal-output).
+ *  ============================================================ */
+.terminal-wrapper,
+.xterm .xterm-rows,
+.chat-terminal-content-title,
+.chat-terminal-content-message,
+.chat-terminal-output-body,
+.chat-terminal-output-info { color: #969696 !important; }
+
+
+/* ============================================================
+ *  10. CONFIRMATION / TOOL APPROVAL / NOTIFICATION WIDGETS
+ *  ============================================================ */
+.chat-confirmation-widget-title,
+.chat-confirmation-widget-message,
+.chat-tool-approval-message,
+.chat-notification-widget,
+.chat-command-button .monaco-button { color: #969696 !important; }
+
+/* Status icons — muted */
+.chat-error-codicon       { color: #7a5c5c !important; }
+.chat-warning-codicon     { color: #7a6b5c !important; }
+.chat-info-codicon        { color: #5c758a !important; }
+
+
+/* ============================================================
+ *  11. KILO CODE EXTENSION — diff red/green backgrounds in
+ *      its webview. The extension.js patch handles the body,
+ *      but these Tailwind utility hits as a safety net.
+ *  ============================================================ */
+[class*="kilo-"] .bg-green-500,
+[class*="kilo-"] .bg-green-600,
+[class*="kilo-"] [class*="diff-added"]   { background-color: #0a150a !important; }
+
+[class*="kilo-"] .bg-red-500,
+[class*="kilo-"] .bg-red-600,
+[class*="kilo-"] [class*="diff-removed"] { background-color: #150a0a !important; }

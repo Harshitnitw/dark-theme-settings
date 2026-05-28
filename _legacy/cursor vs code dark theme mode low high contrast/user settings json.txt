@@ -1,0 +1,263 @@
+{
+    "window.commandCenter": true,
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "Ubuntu (WSL)": {
+            "path": "C:\\WINDOWS\\System32\\wsl.exe",
+            "args": [
+                "-d",
+                "Ubuntu"
+            ]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "files.autoSave": "afterDelay",
+    "workbench.colorTheme": "Cursor Dark",
+    "editor.fontSize": 18,
+    "editor.wordWrap": "on",
+    "editor.tokenColorCustomizations": {
+        "[Cursor Dark]": {
+            "textMateRules": [
+                {
+                    "scope": [
+                        "markup.heading",
+                        "markup.heading.markdown",
+                        "markup.heading.1.markdown",
+                        "markup.heading.2.markdown",
+                        "markup.heading.3.markdown",
+                        "markup.heading.4.markdown",
+                        "markup.heading.5.markdown",
+                        "markup.heading.6.markdown",
+                        "entity.name.section.markdown",
+                        "punctuation.definition.heading.markdown",
+                        "meta.heading.markdown"
+                    ],
+                    "settings": {
+                        "foreground": "#969696"
+                    }
+                },
+                {
+                    "scope": [
+                        "source",
+                        "variable",
+                        "meta.function-call.generic",
+                        "support.variable"
+                    ],
+                    "settings": {
+                        "foreground": "#b4b4b4"
+                    }
+                },
+                {
+                    "scope": [
+                        "variable.other.constant.python"
+                    ],
+                    "settings": {
+                        "foreground": "#b4b4b4"
+                    }
+                },
+                {
+                    "scope": [
+                        "entity.name.function",
+                        "support.function",
+                        "punctuation",
+                        "entity.name.function.decorator"
+                    ],
+                    "settings": {
+                        "foreground": "#b4b4b4"
+                    }
+                },
+                {
+                    "scope": [
+                        "keyword.operator"
+                    ],
+                    "settings": {
+                        "foreground": "#b4b4b4"
+                    }
+                },
+                {
+                    "scope": [
+                        "meta.paragraph.markdown",
+                        "markup.inline.raw.string.markdown"
+                    ],
+                    "settings": {
+                        "foreground": "#b4b4b4"
+                    }
+                },
+                {
+                    "scope": [
+                        "markup.inserted.diff",
+                        "markup.deleted.diff"
+                    ],
+                    "settings": {
+                        "foreground": "#b4b4b4"
+                    }
+                },
+                // --- FINAL COMPREHENSIVE FIX for code in Markdown ---
+                {
+                    "scope": [
+                        "fenced_code.block.language.markdown",      // For the 'diff' keyword
+                        "markup.fenced_code.block.markdown keyword",  // For keywords like 'from', 'import'
+                        "markup.fenced_code.block.markdown storage.type", // For types like 'str', 'Optional'
+                        "markup.fenced_code.block.markdown constant.language", // For 'None', 'True'
+                        "markup.fenced_code.block.markdown support.type" // For built-in types like 'List'
+                    ],
+                    "settings": {
+                        "foreground": "#b4b4b4"
+                    }
+                },
+                {
+                    "scope": [
+                        "meta.diff.header",
+                        "meta.diff.index",
+                        "meta.diff.header.from-file",
+                        "meta.diff.header.to-file",
+                        "meta.diff.range"
+                    ],
+                    "settings": {
+                        "foreground": "#88ddff"
+                    }
+                },
+                {
+                    "scope": [
+                        "meta.tag.jsx.children",
+                        "string.unquoted.plain.in.jsx"
+                    ],
+                    "settings": {
+                        "foreground": "#b4b4b4"
+                    }
+                },
+                {
+                    "scope": [
+                        "text.html.derivative"
+                    ],
+                    "settings": {
+                        "foreground": "#b4b4b4"
+                    }
+                }
+            ]
+        }
+    },
+    "workbench.colorCustomizations": {
+        "[Cursor Dark]": {
+            "foreground": "#CCCCCC",
+            "editor.background": "#000000",
+            "editorGutter.background": "#000000",
+            "sideBar.foreground": "#b4b4b4",
+            "sideBar.background": "#000000",
+            "sideBar.border": "#333333",
+            "sideBarTitle.foreground": "#b4b4b4",
+            "sideBarSectionHeader.background": "#000000",
+            "sideBarSectionHeader.foreground": "#b4b4b4",
+            "sideBarSectionHeader.border": "#333333",
+            "list.activeSelectionForeground": "#b4b4b4",
+            "list.activeSelectionBackground": "#2a2a2a",
+            "list.inactiveSelectionForeground": "#b4b4b4",
+            "list.inactiveSelectionBackground": "#1a1a1a",
+            "list.hoverForeground": "#cccccc",
+            "list.hoverBackground": "#1a1a1a",
+            "list.highlightForeground": "#cccccc",
+            "list.dropBackground": "#2a2a2a",
+            "list.focusForeground": "#b4b4b4",
+            "list.focusBackground": "#2a2a2a",
+            "tree.indentGuidesStroke": "#404040",
+            "minimap.background": "#000000",
+            "activityBar.background": "#000000",
+            "activityBar.foreground": "#b4b4b4",
+            "activityBar.inactiveForeground": "#666666",
+            "activityBar.border": "#333333",
+            "activityBarBadge.background": "#333333",
+            "activityBarBadge.foreground": "#b4b4b4",
+            "titleBar.activeBackground": "#000000",
+            "titleBar.activeForeground": "#b4b4b4",
+            "titleBar.inactiveBackground": "#000000",
+            "titleBar.inactiveForeground": "#666666",
+            "titleBar.border": "#333333",
+            "panel.background": "#000000",
+            "panel.border": "#333333",
+            "panelTitle.activeForeground": "#969696",
+            "panelTitle.inactiveForeground": "#A0A0A0",
+            "panelSection.border": "#333333",
+            "panelSectionHeader.background": "#000000",
+            "panelSectionHeader.foreground": "#b4b4b4",
+            "editorGroupHeader.tabsBackground": "#000000",
+            "editorGroup.border": "#333333",
+            "editorGroup.dropBackground": "#2a2a2a",
+            "tab.activeBackground": "#000000",
+            "tab.inactiveBackground": "#0a0a0a",
+            "tab.border": "#333333",
+            "tab.activeBorderTop": "#b4b4b4",
+            "menu.foreground": "#CCCCCC",
+            "icon.foreground": "#CCCCCC",
+            "statusBar.foreground": "#b4b4b4",
+            "statusBar.noFolderForeground": "#b4b4b4",
+            "editor.foreground": "#b4b4b4",
+            "terminal.foreground": "#b4b4b4",
+            "editor.selectionBackground": "#555555",
+            "terminal.selectionBackground": "#555555",
+            "editorLineNumber.foreground": "#AAAAAA",
+            "editorLineNumber.activeForeground": "#969696",
+            "tab.activeForeground": "#969696",
+            "tab.inactiveForeground": "#A0A0A0",
+            "panelTitle.activeForeground": "#969696",
+            "panelTitle.inactiveForeground": "#A0A0A0",
+            "breadcrumb.foreground": "#969696",
+            "breadcrumb.focusForeground": "#CCCCCC",
+            "breadcrumb.activeSelectionForeground": "#CCCCCC",
+            "breadcrumb.background": "#000000",
+            "editorIndentGuide.background1": "#404040",
+            "editorIndentGuide.activeBackground1": "#707070",
+            "terminal.ansiBrightWhite": "#b4b4b4",
+            "terminal.ansiWhite": "#b4b4b4",
+            "terminal.ansiGreen": "#969696",
+            "terminal.ansiBrightGreen": "#969696",
+            "terminal.ansiYellow": "#969696",
+            "terminal.ansiBrightYellow": "#969696",
+            "terminalCursor.foreground": "#969696",
+            "terminalCursor.background": "#969696",
+            // "diffEditor.insertedTextForeground": "#b4b4b4",
+            // "diffEditor.removedTextForeground": "#b4b4b4"
+        }
+    },
+    "cursor.composer.shouldQueueWhenGenerating": false,
+    "cursor.composer.textSizeScale": 1.15,
+    // "terminal.integrated.defaultProfile.windows": "Git Bash",
+    //created for claude code
+    "terminal.integrated.env.linux": {
+        "FORCE_COLOR": "0"
+    },
+    "roo-cline.allowedCommands": [
+        "npm test",
+        "npm install",
+        "tsc",
+        "git log",
+        "git diff",
+        "git show"
+    ],
+    "roo-cline.deniedCommands": [],
+    "git.autofetch": true,
+    "window.autoDetectColorScheme": false,
+    "window.autoDetectHighContrast": false,
+    "window.highContrast": false,
+    "terminal.integrated.commandsToSkipShell": [
+        "kilo-code.new.agentManagerOpen",
+        "kilo-code.new.agentManager.showTerminal"
+    ],
+    "kilo-code.new.showTaskTimeline": false,
+    "markdown.preview.": [
+        "file:///C:/Users/Harshit/AppData/Roaming/Cursor/User/markdown-low-contrast.css"
+    ]
+}

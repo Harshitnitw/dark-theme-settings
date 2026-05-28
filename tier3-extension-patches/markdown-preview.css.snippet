@@ -1,0 +1,33 @@
+/* ============================================================
+ * Low Contrast Text Overrides — anti-halation (manual install)
+ *
+ * Append this block to your IDE's bundled markdown preview CSS:
+ *   • Antigravity (Linux):  /usr/share/antigravity/resources/app/extensions/markdown-language-features/media/markdown.css
+ *   • VS Code (Linux):      /usr/share/code/resources/app/extensions/markdown-language-features/media/markdown.css
+ *   • Antigravity (macOS):  /Applications/Antigravity.app/Contents/Resources/app/extensions/markdown-language-features/media/markdown.css
+ *   • VS Code (macOS):      /Applications/Visual Studio Code.app/Contents/Resources/app/extensions/markdown-language-features/media/markdown.css
+ *   • Antigravity (Win):    C:\Users\<you>\AppData\Local\Programs\Antigravity\resources\app\extensions\markdown-language-features\media\markdown.css
+ *
+ * After appending, restart the IDE.
+ * On IDE update this file is overwritten — re-append.
+ *
+ * Fenced code blocks keep syntax-highlight colors intact;
+ * plain text inside (ASCII art, unhighlighted runs) dims to body gray;
+ * only the background and unstyled fallback color are touched.
+ *
+ * IMPORTANT: `pre code` color is set WITHOUT !important so that
+ * shiki / highlight.js / TextMate token spans (inline-styled or
+ * class-based with higher specificity) continue to win the cascade.
+ * ============================================================ */
+body { color: #969696 !important; background-color: #000000 !important; }
+h1, h2, h3, h4, h5, h6, strong, b { color: #8a8a8a !important; font-weight: 500 !important; }
+h1, h2 { color: #7a7a7a !important; }
+a { color: #5c758a !important; }
+blockquote { color: #8a8a8a !important; border-left-color: #333 !important; background-color: #050505 !important; }
+hr { border-color: #333 !important; }
+table { border-color: #1a1a1a !important; }
+table th { color: #8a8a8a !important; background-color: #050505 !important; }
+table td { color: #969696 !important; background-color: #000000 !important; }
+:not(pre) > code { color: #8a8a8a !important; background-color: #0a0a0a !important; border: 1px solid #151515 !important; padding: 1px 4px !important; }
+pre { background-color: #020202 !important; border: 1px solid #0a0a0a !important; }
+pre code { color: #969696; background-color: transparent !important; }
