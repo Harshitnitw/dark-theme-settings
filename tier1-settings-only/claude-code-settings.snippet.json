@@ -1,0 +1,19 @@
+// =====================================================================
+// Claude Code CLI — `~/.claude/settings.json`
+// =====================================================================
+// Critical: `"theme": "dark"` uses hardcoded RGB colors (24-bit ANSI
+// true color) for bold, inline code, headings, etc. Those bypass the
+// terminal emulator's ANSI palette entirely — so all the work in
+// Antigravity/VS Code's `terminal.ansi*` settings has zero effect on
+// Claude's CLI output.
+//
+// `"theme": "dark-ansi"` is the same dark scheme but emits standard
+// 16-color ANSI codes. Now Claude's bold/code/etc. inherits whatever
+// you configured `terminal.ansiBrightWhite`, `terminal.ansiCyan`,
+// `terminal.ansiMagenta` to — i.e. your dimmed palette.
+//
+// Restart Claude Code (exit and re-launch) for the change to apply.
+// =====================================================================
+{
+  "theme": "dark-ansi"
+}
