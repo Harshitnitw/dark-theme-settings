@@ -10,23 +10,76 @@ Move down only if you still see bright spots.
 
 | Tier | Touches | Survives IDE update? | Risk | What it fixes |
 |---|---|---|---|---|
-| **1** Settings | `~/.config/.../settings.json` | ✅ yes | none | Editor, side bar (incl. section headers, tree guides), activity bar (active indicator + badges), tabs (incl. modified dot + close X area), panels, title bar, status bar (incl. prominent / remote / error items), command center, autocomplete + hover widgets, command palette, dropdowns / buttons / badges, notifications, git decoration colors, terminal ANSI palette, diff editor |
+| **1** Settings | `~/.config/.../settings.json` | ✅ yes | none | Editor, **editor syntax tokens (keywords/strings/numbers/types/functions dimmed to match ANSI)**, side bar (incl. section headers, tree guides), activity bar (active indicator + badges), tabs (incl. modified dot + close X area), panels, title bar, status bar (incl. prominent / remote / error items), command center, autocomplete + hover widgets, command palette, dropdowns / buttons / badges, notifications, git decoration colors, terminal ANSI palette, diff editor |
 | **2** Workbench CSS | `resources/app/.../workbench.html` + `.css` | ❌ no — re-run | shows cosmetic "corrupt" banner | Antigravity agent chat, all Tailwind-styled UI |
 | **3** Extension CSS | `resources/app/extensions/...markdown.css` + Kilo `extension.js` | ❌ no — re-run | none functional | Markdown preview (incl. plain text in code blocks), Kilo Code chat & diff |
 
-Color palette (consistent across all three tiers):
+Color palette.
 
-| Use | Color | Notes |
+The anti-halation hierarchy (emphasis = *dimmer*, not brighter) only kicks
+in where size/weight actually changes — i.e. the **markdown preview**.
+The source editor view of a `.md` file shows `# Heading` and body
+prose at identical visual size, so dimming the heading there would
+falsely shrink it. **Source view is flat at the body color**; preview
+adds the luminance steps.
+
+| Surface | Body | h3–h6 / `**bold**` | h1 / h2 | Notes |
+|---|---|---|---|---|
+| **Editor** (any file, .md source) | `#7a7a7a` | `#7a7a7a` (same) | `#7a7a7a` (same) | Flat — no luminance hierarchy; size is uniform in source |
+| **Markdown preview** | `#7a7a7a` | `#6a6a6a` | `#5a5a5a` | Headings/bold dim *because* size + weight already signal emphasis |
+| **Terminal / TUI** | `#7a7a7a` (`terminal.foreground`) | `#6a6a6a` (`ansiBrightWhite` / SGR 1) | — | Synthetic block cursor (Claude Code / Ink) fills with `terminal.foreground` via SGR-7 reverse, so this dim level keeps it quiet |
+| **UI chrome** (sidebar, status bar, panel) | `#969696` | — | — | Deliberately *brighter* than editor body so navigation is findable; content sits below chrome in luminance |
+
+| Other | Color | Notes |
 |---|---|---|
-| Body / editor text | `#969696` | The dim gray for everything readable |
-| Bold + h3–h6 | `#8a8a8a` | Slightly DIMMER than body |
-| h1 + h2 | `#7a7a7a` | Even dimmer — the biggest text gets least luminance |
 | Sub-labels (dates, citations) | `#555555` | |
 | Background | `#000000` | Pure black |
 | Code-block bg | `#020202` | Just barely off-black so it's distinguishable |
 | Inline-code bg | `#0a0a0a` | |
 | Links | `#5c758a` | Muted blue |
 | Terminal red / green / yellow / blue | `#a87a7a` / `#7a9a7a` / `#8a8270` / `#5c758a` | ANSI colors preserved, dimmed but kept readable for diff hunks |
+
+### Editor syntax token palette
+
+The editor's TextMate token colors mirror the ANSI palette below so
+code in the editor and code in the terminal sit at the same luminance.
+Hue is preserved — keywords still red, strings still green, types
+still blue — they just stop shouting. Operators and punctuation are
+pinned to body color so dense glyph clusters (`::`, `=>`, `<>`) don't
+out-shout the identifiers around them.
+
+| Scope (TextMate) | Color | Token examples |
+|---|---|---|
+| `comment` | `#5a5a5a` italic | `// like this` |
+| `keyword`, `keyword.control` | `#a87a7a` (dim red) | `if`, `else`, `return`, `for`, `async` |
+| `keyword.operator` | `#7a7a7a` (body) | `=`, `::`, `=>`, `<`, `>` |
+| `storage`, `storage.type`, `storage.modifier` | `#5c758a` (dim blue) | `let`, `const`, `fn`, `pub`, `mut`, `def`, `class` |
+| `string`, `string.template` | `#7a9a7a` (dim green) | `"..."`, ``` `...` ``` |
+| `constant.character.escape`, `string.regexp` | `#8a8270` | `\n`, `\t`, regex literals |
+| `constant.numeric`, `constant.language` | `#8a8270` (dim yellow) | `42`, `true`, `false`, `None`, `null` |
+| `entity.name.function`, `support.function` | `#5c8a8a` (dim cyan) | `main`, `println!`, `console.log` |
+| `entity.name.type`, `support.type`, `support.class` | `#5c758a` (dim blue) | `Result`, `Vec<T>`, `String`, `Witness` |
+| `variable.other.constant`, `constant.other` | `#8a8270` | `MAX_LEN`, UPPER_CASE constants |
+| `variable`, `variable.parameter`, `variable.other.property` | `#7a7a7a` (body) | identifiers — the most common token, sits at base luminance |
+| `punctuation`, `meta.brace` | `#7a7a7a` (body) | `{`, `}`, `;`, `,`, `.` |
+| `entity.name.decorator`, `meta.attribute` | `#7a5c8a` (dim magenta) | `@override`, `#[derive(...)]`, `@app.route(...)` |
+| `entity.name.tag`, `meta.tag` | `#a87a7a` | `<div>`, JSX/HTML/XML tags |
+| `entity.other.attribute-name` | `#8a8270` | `class="..."`, JSX props |
+| `invalid`, `invalid.deprecated` | `#a87a7a` italic | linter-flagged tokens |
+
+Why these scopes specifically: TextMate scopes are language-ish — TS,
+Rust, Python, and Go grammars all emit slightly different sub-scopes,
+but they all share these top-level prefixes. The rules above match
+`keyword.*`, `storage.*`, etc. via TextMate's prefix-match semantics,
+so they cover ~90% of tokens across mainstream languages without
+per-language rules. If a token in some language stays bright, find
+its exact scope (Ctrl/Cmd+Shift+P → "Inspect Editor Tokens and Scopes")
+and add a row.
+
+The list is NARROW on purpose. Broad scopes like `source`, `text`, or
+`text.html.markdown` would override **all** descendant token colors
+and flatten syntax highlighting (same mistake as `body, body *` in
+CSS). Don't add those.
 
 ### Terminal / ANSI palette (for Claude Code, oh-my-zsh, any TUI)
 
@@ -37,11 +90,11 @@ any TUI run inside the integrated terminal. The mapping that matters:
 
 | ANSI slot | Color | What Claude Code uses it for |
 |---|---|---|
-| `terminal.foreground` | `#969696` | Default body text |
+| `terminal.foreground` | `#7a7a7a` | TUI body text — set **below** editor body (`#969696`) so synthetic cursors (Claude Code / Ink draw a block via SGR-7 reverse, which fills with this color) don't outshine the surrounding glyphs |
 | `terminal.ansiBlack` | `#000000` | True black backgrounds |
 | `terminal.ansiBrightBlack` | `#1a1a1a` | **User input panel background** (xterm default is #808080 — halates hard on black). Also "subtle highlight" backgrounds in most TUIs |
-| `terminal.ansiWhite` | `#969696` | Plain (non-bold) text — same as body |
-| `terminal.ansiBrightWhite` | `#8a8a8a` | **Bold text** — bold headings (`Update(...)`), line counts (`9`, `31`), emphasized words (`both`), the `●` bullet. DIMMER than body per anti-halation |
+| `terminal.ansiWhite` | `#7a7a7a` | Plain (non-bold) text — kept equal to `terminal.foreground` |
+| `terminal.ansiBrightWhite` | `#6a6a6a` | **Bold text** — bold headings (`Update(...)`), line counts (`9`, `31`), emphasized words (`both`), the `●` bullet. DIMMER than body per anti-halation |
 | `terminal.ansiRed` / `ansiBrightRed` | `#a87a7a` | Removed diff lines (`- removed`) — bright enough to READ inside hunks |
 | `terminal.ansiGreen` / `ansiBrightGreen` | `#7a9a7a` | Added diff lines (`+ added`) — paired with red brightness for readable diffs |
 | `terminal.ansiYellow` / `ansiBrightYellow` | `#8a8270` | Warnings, modified-file markers, search highlights |
@@ -59,7 +112,7 @@ All three must be neutralized:
 ```jsonc
 "terminal.integrated.fontWeightBold": "normal",
 "terminal.integrated.drawBoldTextInBrightColors": true,
-"terminal.integrated.minimumContrastRatio": 1
+"terminal.integrated.minimumContrastRatio": 2.5
 ```
 
 - **`fontWeightBold: "normal"`** — by default xterm.js renders ANSI
@@ -71,12 +124,20 @@ All three must be neutralized:
   default; set it explicitly anyway so it can't be turned off by an
   IDE-wide preference change. It's what routes ANSI bold through
   `ansiBrightWhite` so our dim color applies.
-- **`minimumContrastRatio: 1`** — by default xterm.js auto-brightens
-  any foreground that falls below a 4.5:1 ratio against the
-  background. With body at `#969696` on `#000000` this isn't usually
-  triggered, but bold at `#8a8a8a` is close to the threshold and can
-  get silently lifted. `1` (effectively off) keeps the palette
-  exactly as authored.
+- **`minimumContrastRatio: 2.5`** — xterm.js auto-brightens any
+  foreground that falls below this ratio against the background.
+  `1` (off) keeps the palette exactly as authored but means SGR-2
+  *dim* text (which Claude Code uses for code-block comments) ends
+  up at ~1.9:1 — visible but dimmer than red diff hunks, which
+  reads as "broken." `2.5` is the sweet spot: it lifts dim text
+  just enough to be legible (~2.5:1 ≈ `#5a5a5a` rendered) while
+  leaving the authored palette alone. The thresholds for reference:
+    - body `#7a7a7a` on `#000000` ≈ **5.0:1** (untouched)
+    - bold `#6a6a6a`              ≈ **3.7:1** (untouched)
+    - cursor `#5a5a5a`            ≈ **3.1:1** (untouched)
+    - SGR-2 dim of body           ≈ **1.9:1** → lifted to 2.5:1
+  Don't set it to `4.5` (the W3C-AA default) — that would lift body
+  *and* cursor, undoing the whole anti-halation calibration.
 
 ### Where ANSI bold actually comes from in Claude Code
 
@@ -173,9 +234,9 @@ Windows (PowerShell as Administrator):
 ```
 
 After install:
-
+r
 1. Restart Antigravity **completely** (not just "Reload Window")
-2. A cosmetic "Installation appears corrupt" banner will appear once.
+2. A cosmetic "Installation appeas corrupt" banner will appear once.
    Dismiss it. (Ctrl+Shift+P → "Dismiss Corrupt Installation Message"
    to make the banner check shut up.)
 3. On Antigravity auto-update, the file is overwritten — re-run the
@@ -272,7 +333,7 @@ runs, language-less fences) bright white. To fix that without killing
 syntax highlighting, the override is
 
 ```css
-pre code { color: #969696; background-color: transparent !important; }
+pre code { color: #7a7a7a; background-color: transparent !important; }
 ```
 
 — color is set **without** `!important`. Source-order cascade beats

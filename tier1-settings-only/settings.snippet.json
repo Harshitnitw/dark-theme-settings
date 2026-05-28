@@ -10,8 +10,9 @@
 //
 // What you get out of Tier 1 alone:
 //   • Black editor / sidebar / panel / titlebar / status bar
-//   • Dim-gray (#969696) editor text and prose
-//   • Dimmer (#8a8a8a) bold + headings in markdown source
+//   • Dim-gray (#7a7a7a) editor body — flat across body / bold /
+//     heading in source view (no luminance hierarchy where size
+//     and weight are uniform; preview adds the hierarchy)
 //   • Dim active tab name (#8a8a8a) — fixes the bright tab filename
 //   • Tab modified-dot indicator dimmed (no more bright white dot)
 //   • Side bar section headers ("OUTLINE", "TIMELINE") dimmed
@@ -58,9 +59,10 @@
     //
     //  * drawBoldTextInBrightColors true (xterm.js default): routes ANSI
     //    bold through the bright palette. Combined with a dimmed
-    //    terminal.ansiBrightWhite (#8a8a8a), this is how we make Claude
+    //    terminal.ansiBrightWhite (#6a6a6a), this is how we make Claude
     //    Code's bold text (headings, "Update(...)", diff line counts, the
-    //    ● bullet) dimmer than body without breaking syntax color cues.
+    //    ● bullet) dimmer than body (#7a7a7a) without breaking syntax
+    //    color cues.
     //
     //  * minimumContrastRatio 1: disables xterm.js's auto-contrast lift.
     //    By default xterm.js silently brightens fg colors that fall below
@@ -68,7 +70,7 @@
     //    Setting 1 (effectively off) keeps the palette exactly as authored.
     "terminal.integrated.fontWeightBold": "normal",
     "terminal.integrated.drawBoldTextInBrightColors": true,
-    "terminal.integrated.minimumContrastRatio": 1,
+    "terminal.integrated.minimumContrastRatio": 2.5,
 
     // NOTE: customizations are NOT theme-scoped ([ThemeName] wrappers).
     // Antigravity doesn't actually register a theme named "Antigravity" —
@@ -80,23 +82,37 @@
     // can optionally rewrap these in "[Default Dark Modern]" /
     // "[Cursor Dark]" if you want them to revert when switching themes.
     //
-    // Dim bold + headings BELOW body brightness — anti-halation.
-    // Body is set via editor.foreground (#969696) below.
-    // Token rules are NARROW on purpose. We only dim:
-    //   * bold        → #8a8a8a (slightly dimmer than body)
-    //   * headings    → #7a7a7a (most dimmed — biggest text, least luminance)
-    //   * diff hunks  → muted blue
-    // Body text comes from editor.foreground (#969696). Inline code spans,
-    // links, syntax-highlight tokens (.token.string, .hljs-keyword, etc.)
-    // are LEFT ALONE — the theme keeps coloring them so the editor isn't
-    // a flat gray wall. Broad scopes like "text", "source", or
-    // "text.html.markdown" would override all those tokens and flatten
-    // syntax highlighting (the same mistake as `body, body *` in CSS).
+    // Source view is FLAT. No luminance hierarchy here — `# Heading`
+    // and body prose are the same visual size in raw .md, so dimming
+    // the heading would falsely shrink it. The anti-halation steps
+    // (body → bold → h1/h2 each darker) only kick in in the markdown
+    // PREVIEW, where size + weight actually grow. That's handled by
+    // Tier 3's markdown.css patch, not here.
+    //
+    // We KEEP the markup.bold / markup.heading rules below (just
+    // pinned to #7a7a7a, same as editor.foreground) so the underlying
+    // theme can't paint them a different color. Diff hunks stay
+    // muted blue.
+    //
+    // Editor syntax tokens. We dim the theme's bright syntax colors to
+    // the SAME palette used for ANSI (red #a87a7a, green #7a9a7a, etc.)
+    // so the editor and terminal stay luminance-coherent. Hue is
+    // preserved — keywords still red, strings still green, types still
+    // blue — but each color is luminance-matched to the dim ANSI set.
+    //
+    // Operators and punctuation are pinned at body color (#7a7a7a) so
+    // dense glyph clusters (`::`, `<>`, `=>`) don't out-shout the
+    // identifiers around them.
+    //
+    // Token rules stay scope-specific. Broad scopes like "text",
+    // "source", or "text.html.markdown" would override all token
+    // colors and flatten syntax highlighting (same mistake as
+    // `body, body *` in CSS). The list below is narrow on purpose.
     "editor.tokenColorCustomizations": {
         "textMateRules": [
             {
                 "scope": ["markup.bold", "markup.bold.markdown"],
-                "settings": { "foreground": "#8a8a8a", "fontStyle": "" }
+                "settings": { "foreground": "#7a7a7a", "fontStyle": "" }
             },
             {
                 "scope": ["markup.heading.markdown", "markup.heading"],
@@ -115,6 +131,156 @@
                     "meta.diff.range"
                 ],
                 "settings": { "foreground": "#5c758a" }
+            },
+
+            // ─── comments ─────────────────────────────────────────────
+            // Dimmer than body so they sink into the background.
+            {
+                "scope": ["comment", "punctuation.definition.comment"],
+                "settings": { "foreground": "#5a5a5a", "fontStyle": "italic" }
+            },
+
+            // ─── keywords ─────────────────────────────────────────────
+            // Control flow (`if`, `else`, `return`, `for`, `while`, `match`)
+            // → dim red. Other (`async`, `await`, `import`, `export`) too.
+            {
+                "scope": ["keyword", "keyword.control", "keyword.other"],
+                "settings": { "foreground": "#a87a7a" }
+            },
+            // Operators (`=`, `::`, `=>`, `<`, `>`, `+`, `-`) → body color
+            // so dense punctuation doesn't visually shout.
+            {
+                "scope": ["keyword.operator"],
+                "settings": { "foreground": "#7a7a7a" }
+            },
+
+            // ─── storage (declaration words) ──────────────────────────
+            // `let`, `const`, `var`, `fn`, `pub`, `mut`, `static`, `class`,
+            // `def`, `function` → dim blue. They're declarators, not
+            // control flow, so a separate hue from `keyword.control`.
+            {
+                "scope": ["storage", "storage.type", "storage.modifier"],
+                "settings": { "foreground": "#5c758a" }
+            },
+
+            // ─── strings ──────────────────────────────────────────────
+            {
+                "scope": ["string", "string.quoted", "string.template"],
+                "settings": { "foreground": "#7a9a7a" }
+            },
+            // String escapes (`\n`, `\t`) → dim yellow so they're
+            // distinguishable inside green string runs.
+            {
+                "scope": ["constant.character.escape", "string.regexp"],
+                "settings": { "foreground": "#8a8270" }
+            },
+
+            // ─── numbers / language constants ─────────────────────────
+            // `42`, `3.14`, `0xff`, `true`, `false`, `null`, `None`,
+            // `Some`, `nil`, `undefined` → dim yellow.
+            {
+                "scope": ["constant.numeric", "constant.language"],
+                "settings": { "foreground": "#8a8270" }
+            },
+
+            // ─── functions & methods ──────────────────────────────────
+            // Definition + call sites → dim cyan. `support.function`
+            // catches builtins (`println!`, `print`, `console.log`).
+            {
+                "scope": [
+                    "entity.name.function",
+                    "meta.function-call",
+                    "support.function",
+                    "variable.function"
+                ],
+                "settings": { "foreground": "#5c8a8a" }
+            },
+
+            // ─── types, classes, enums, interfaces ────────────────────
+            // `Result`, `Scalar`, `Vec`, `String`, `i32`, `Witness`,
+            // `MyClass`, `MyInterface` → dim blue (same as storage so
+            // type system tokens group together visually).
+            {
+                "scope": [
+                    "entity.name.type",
+                    "entity.name.class",
+                    "entity.name.enum",
+                    "entity.name.interface",
+                    "entity.name.struct",
+                    "entity.name.namespace",
+                    "support.type",
+                    "support.class",
+                    "support.type.primitive"
+                ],
+                "settings": { "foreground": "#5c758a" }
+            },
+
+            // ─── constants (UPPER_CASE) ───────────────────────────────
+            {
+                "scope": ["variable.other.constant", "constant.other"],
+                "settings": { "foreground": "#8a8270" }
+            },
+
+            // ─── variables / parameters / properties ──────────────────
+            // Body color — identifiers are the most common tokens, so
+            // they sit at the editor's base luminance and the colored
+            // tokens above stand out against them.
+            {
+                "scope": [
+                    "variable",
+                    "variable.other",
+                    "variable.parameter",
+                    "variable.other.readwrite",
+                    "variable.other.property",
+                    "meta.object-literal.key"
+                ],
+                "settings": { "foreground": "#7a7a7a" }
+            },
+
+            // ─── punctuation ──────────────────────────────────────────
+            // `{`, `}`, `(`, `)`, `;`, `,`, `.` → body color. Some themes
+            // paint brackets bright; we pin them so they don't stand out.
+            {
+                "scope": [
+                    "punctuation",
+                    "punctuation.separator",
+                    "punctuation.terminator",
+                    "punctuation.section",
+                    "meta.brace"
+                ],
+                "settings": { "foreground": "#7a7a7a" }
+            },
+
+            // ─── decorators / attributes / annotations ────────────────
+            // `@override`, `#[derive(...)]`, `@app.route(...)` → dim
+            // magenta so they're visually distinct from regular calls.
+            {
+                "scope": [
+                    "entity.name.decorator",
+                    "meta.decorator",
+                    "meta.annotation",
+                    "meta.attribute",
+                    "punctuation.definition.annotation"
+                ],
+                "settings": { "foreground": "#7a5c8a" }
+            },
+
+            // ─── tags (HTML/JSX/XML) ──────────────────────────────────
+            {
+                "scope": ["entity.name.tag", "meta.tag"],
+                "settings": { "foreground": "#a87a7a" }
+            },
+            {
+                "scope": ["entity.other.attribute-name"],
+                "settings": { "foreground": "#8a8270" }
+            },
+
+            // ─── invalid / deprecated ─────────────────────────────────
+            // Theme defaults paint these in alarming reds — keep them
+            // signaling but at the same dim red as keywords.
+            {
+                "scope": ["invalid", "invalid.deprecated"],
+                "settings": { "foreground": "#a87a7a", "fontStyle": "italic" }
             }
         ]
     },
@@ -126,7 +292,7 @@
             "descriptionForeground": "#969696",
 
             // ─── editor ───────────────────────────────────────────────
-            "editor.foreground": "#969696",
+            "editor.foreground": "#7a7a7a",
             "editor.background": "#000000",
             "editor.selectionBackground": "#1a1a1a",
             "editorGroup.background": "#000000",
@@ -227,7 +393,7 @@
             // hurting your eyes, but we leave the other ANSI colors
             // as muted versions of themselves so syntax / diff / status
             // colors are still distinguishable.
-            "terminal.foreground": "#969696",
+            "terminal.foreground": "#7a7a7a",
             "terminal.background": "#000000",
             "terminal.selectionBackground": "#1a1a1a",
             // ansiBrightBlack is what Claude Code (and many TUIs) use as
@@ -242,8 +408,8 @@
             // through ansiBrightWhite. Per anti-halation: bold should be
             // DIMMER than body, not equal/brighter. So ansiBrightWhite is
             // explicitly DIMMER than ansiWhite.
-            "terminal.ansiBrightWhite": "#8a8a8a",
-            "terminal.ansiWhite": "#969696",
+            "terminal.ansiBrightWhite": "#6a6a6a",
+            "terminal.ansiWhite": "#7a7a7a",
             // Red and green are tuned for diff readability in Claude Code:
             // removed lines (ansiRed) and added lines (ansiGreen) need to
             // be DIM enough to avoid halation but BRIGHT enough that the
@@ -310,6 +476,14 @@
 
             // ─── editor inner widgets ─────────────────────────────────
             "editorCursor.foreground": "#969696",
+            // Ghost text / inline AI suggestions — Antigravity defaults
+            // editorGhostText.border to a bright blue I-beam that ignores
+            // the rest of the palette. Force foreground dim + background
+            // and border transparent so the suggestion blends into the
+            // editor instead of stamping a blue bar at the cursor.
+            "editorGhostText.foreground": "#5a5a5a",
+            "editorGhostText.background": "#00000000",
+            "editorGhostText.border": "#00000000",
             "editor.lineHighlightBackground": "#0a0a0a",
             "editor.lineHighlightBorder": "#0a0a0a",
             "editorBracketMatch.background": "#1a1a1a",
