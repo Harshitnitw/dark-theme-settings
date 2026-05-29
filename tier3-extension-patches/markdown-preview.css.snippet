@@ -23,7 +23,7 @@ body { color: #7a7a7a !important; background-color: #000000 !important; }
 h1, h2, h3, h4, h5, h6, strong, b { color: #6a6a6a !important; font-weight: 500 !important; }
 h1, h2 { color: #5a5a5a !important; }
 a { color: #5c758a !important; }
-blockquote { color: #6a6a6a !important; border-left-color: #333 !important; background-color: #050505 !important; }
+blockquote { color: #6a6a6a !important; border-left-color: #1a1a1a !important; background-color: #050505 !important; }
 hr { border-color: #333 !important; }
 table { border-color: #1a1a1a !important; }
 table th { color: #6a6a6a !important; background-color: #050505 !important; border-bottom-color: #1a1a1a !important; }
@@ -32,3 +32,18 @@ table > tbody > tr + tr > td { border-top-color: #1a1a1a !important; }
 :not(pre) > code { color: #6a6a6a !important; background-color: #0a0a0a !important; border: 1px solid #151515 !important; padding: 1px 4px !important; }
 pre { background-color: #020202 !important; border: 1px solid #0a0a0a !important; }
 pre code { color: #7a7a7a; background-color: transparent !important; }
+
+/* Dim hover indicators on left side of elements */
+p:hover, h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover,
+ul:hover, ol:hover, li:hover, blockquote:hover, pre:hover,
+table:hover, tr:hover, td:hover, th:hover {
+  border-left-color: #2a2a2a !important;
+}
+
+p::before, p::after, h1::before, h1::after, h2::before, h2::after,
+h3::before, h3::after, h4::before, h4::after, h5::before, h5::after,
+h6::before, h6::after, ul::before, ul::after, ol::before, ol::after,
+li::before, li::after, blockquote::before, blockquote::after {
+  border-left-color: #2a2a2a !important;
+  background-color: #2a2a2a !important;
+}
